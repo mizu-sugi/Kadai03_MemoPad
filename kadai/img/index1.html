@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes App</title>
+    <link rel="stylesheet" href="./kadai/css/sample.css">
+    <script src="./kadai/js/jquery-2.1.3.min.js"></script>
+
+<body>
+    <div class="container" id="notes-container"></div>
+
+    <div class="add-note">
+        <button onclick="createStickyNote()">Add a Sticky Note</button>
+    </div>
+
+    <div id="save">
+        <button onclick="save()">SAVE</button>
+    </div>
+
+    <div id="clear">
+        <button onclick="clear()">CLEAR</button>
+    </div>
+
+    <script>
+      // save関数を定義
+      function save() {
+        const value = $("#notes-container").html(); 
+        localStorage.setItem("container", value);
+        alert("SAVED");
+    }
+
+    // ボタンにイベントをバインド
+    $("#save button").on("click", function() {
+    const value = $("#notes-container").html(); // .html() を使用して HTML コンテンツを取得する
+    console.log("Value:", value); // データが正しく取得されているかを確認する
+    localStorage.setItem("container", value);
+    console.log("Data saved to localStorage."); // データが保存されたかを確認する
+    alert("SAVED");
+});
+
+        //clearクリックイベント
+        $("#clear").on("click",function(){
+            alert("cleared");
+        });
+
+
+        // ページ読み込み時に付箋をロードする
+window.onload = function() {
+    loadStickyNotes();
+};
+
+// 新しい付箋を作成する
+function createStickyNote() {
+    var notesContainer = document.getElementById("notes-container");
+    var note = document.createElement("div");
+    note.className = "note";
+    note.contentEditable = true;
+    note.addEventListener("input", function() {
+        saveStickyNotes();
+    });
+    notesContainer.appendChild(note);
+}
+
+// 付箋を保存する
+function saveStickyNotes() {
+    var notes = document.getElementsByClassName("note");
+    var notesArray = [];
+    for (var i = 0; i < notes.length; i++) {
+        notesArray.push(notes[i].innerHTML);
+    }
+    localStorage.setItem("stickyNotes", JSON.stringify(notesArray));
+}
+
+// 付箋をロードする
+function loadStickyNotes() {
+    var notesContainer = document.getElementById("notes-container");
+    var notes = JSON.parse(localStorage.getItem("stickyNotes"));
+    if (notes !== null) {
+        for (var i = 0; i < notes.length; i++) {
+            var note = document.createElement("div");
+            note.className = "note";
+            note.innerHTML = notes[i];
+            note.contentEditable = true;
+            note.addEventListener("input", function() {
+                saveStickyNotes();
+            });
+            notesContainer.appendChild(note);
+        }
+    }
+}
+    </script>
+</body>
+</html>

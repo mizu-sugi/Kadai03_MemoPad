@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: lightpink;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.note {
+    background-color: #fff;
+    width: 200px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-note {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-note button {
+    padding: 10px 20px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-note button:hover {
+    background-color: powderblue;
+}
+</style>
+
+<body>
+    <div class="container" id="notes-container">
+        <!-- ここに付箋を追加 -->
+    </div>
+
+    <div class="add-note">
+        <button onclick="createStickyNote()">Add a Sticky Note</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // ページ読み込み時に付箋をロードする
+window.onload = function() {
+    loadStickyNotes();
+};
+
+// 新しい付箋を作成する
+function createStickyNote() {
+    var notesContainer = document.getElementById("notes-container");
+    var note = document.createElement("div");
+    note.className = "note";
+    note.contentEditable = true;
+    note.addEventListener("input", function() {
+        saveStickyNotes();
+    });
+    notesContainer.appendChild(note);
+}
+
+// 付箋を保存する
+function saveStickyNotes() {
+    var notes = document.getElementsByClassName("note");
+    var notesArray = [];
+    for (var i = 0; i < notes.length; i++) {
+        notesArray.push(notes[i].innerHTML);
+    }
+    localStorage.setItem("stickyNotes", JSON.stringify(notesArray));
+}
+
+// 付箋をロードする
+function loadStickyNotes() {
+    var notesContainer = document.getElementById("notes-container");
+    var notes = JSON.parse(localStorage.getItem("stickyNotes"));
+    if (notes !== null) {
+        for (var i = 0; i < notes.length; i++) {
+            var note = document.createElement("div");
+            note.className = "note";
+            note.innerHTML = notes[i];
+            note.contentEditable = true;
+            note.addEventListener("input", function() {
+                saveStickyNotes();
+            });
+            notesContainer.appendChild(note);
+        }
+    }
+}
+    </script>
+</body>
+</html>
