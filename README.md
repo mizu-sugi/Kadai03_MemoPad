@@ -5,6 +5,7 @@ JS3-メモパッドアプリ
 付箋でメモができるアプリ
 
 ③DEMO:
+https://mizu-sugi.github.io/Kadai03_MemoPad/
 
 ④工夫した点・こだわった点：
 必要に応じて付箋を増やしたり消したりできるようにした
